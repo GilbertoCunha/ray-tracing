@@ -1,10 +1,11 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
 #include "camera/pixel.h"
 #include "image_generator/ppm_generator.h"
 #include "logs/progress_bar.h"
 #include "image_generator/ppm_generator.h"
-#include <iostream>
-#include <fstream>
-using namespace std;
 
 /**
  * @brief Main function. Generates and renders the whole scene.
