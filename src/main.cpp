@@ -21,7 +21,7 @@ int main () {
 
     // Create Ray and Sphere
     Ray ray = Ray(
-        Position(0.0, 0.0, 0.0),
+        Position(0.0, 0.0, -2.0),
         Direction(0.0, 0.0, 1.0),
         Color(1.0, 1.0, 1.0)
     );
