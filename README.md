@@ -13,17 +13,18 @@ Hope you enjoy this almost as much as I do!
 
 # TODO
 
-## Functionality:
+## Functionality roadmap:
 
 1. ~~Camera~~
 2. ~~Shooting rays~~
 3. Background
 4. Color sphere
 5. Floor
-6. Anti aliasing (shoot multiple random rays)
-7. Diffuse reflection
-8. Metallic reflection
-9. Refraction
+6. Point `4` of `Quality improvements`
+7. Anti aliasing (shoot multiple random rays)
+8. Diffuse reflection
+9. Metallic reflection
+10. Refraction
 
 
 ## Quality improvements
