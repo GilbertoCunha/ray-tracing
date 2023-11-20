@@ -15,8 +15,8 @@ Hope you enjoy this almost as much as I do!
 
 ## Functionality:
 
-1. Camera
-2. Shooting rays
+1. ~~Camera~~
+2. ~~Shooting rays~~
 3. Background
 4. Color sphere
 5. Floor
@@ -31,3 +31,12 @@ Hope you enjoy this almost as much as I do!
 1. Shift logic from header `.h` files to `.cpp` files
 2. Write `unit` tests
 3. Create an `Orientation` for the camera
+4. Better abstraction in shooting the rays for the camera:
+    - Create `Camera` object just with its properties
+    - Create `Shooter` object to define the rays to trace
+    - Create `Scene` object that holds the whole scene together:
+        - `Camera`
+        - `Shooter`
+        - `Background` (hittable `Sphere`)
+        - `Spheres`
+        - `Floor`
