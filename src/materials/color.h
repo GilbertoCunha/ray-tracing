@@ -40,9 +40,9 @@ class Color {
 
         // Convert to string for different file formats
         string to_ppm() const {
-            int red_int = red() * 255;
-            int green_int = green() * 255;
-            int blue_int = blue() * 255;
+            int red_int = red() * 255.999;
+            int green_int = green() * 255.999;
+            int blue_int = blue() * 255.999;
             return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
         }
 };

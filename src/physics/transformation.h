@@ -22,14 +22,14 @@ class Transformation {
 };
 
 // Apply transformations to vectors and positions
-Direction dot(Transformation& t, Direction& u) {
+Direction dot(const Transformation& t, const Direction& u) {
     return Direction(
         dot(t[0], u),
         dot(t[1], u),
         dot(t[2], u)
     );
 }
-Position dot(Transformation& t, Position& u) {
+Position dot(const Transformation& t, const Position& u) {
     return Position(
         dot(t[0], u),
         dot(t[1], u),

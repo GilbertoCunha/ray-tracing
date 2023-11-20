@@ -3,20 +3,15 @@
 
 #include <iostream>
 #include <cstring>
-#include <exception>
 using namespace std;
 
 
-class ValueError: public exception {
-    private:
-        const char* description;
-    
+class ValueError: public runtime_error {
+    string message;
     public:
-
-        ValueError(string description) : description{description.c_str()} {};
-
-        virtual const char* what() const throw() {
-            return description;
+        ValueError(char const* const message) throw() : runtime_error(message), message{message} {}
+        const char* what() const throw() override{
+            return message.c_str();
         }
 };
 

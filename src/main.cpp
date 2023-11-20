@@ -77,7 +77,6 @@ int main () {
     cout << "##################" << '\n';
     cout << dot(r, d) << '\n';
     */
-
     Camera camera = Camera();
     camera.render("result.ppm");
 
