@@ -19,9 +19,15 @@ Hope you enjoy this almost as much as I do!
 2. Shooting rays
 3. Background
 4. Color sphere
+5. Floor
+6. Anti aliasing (shoot multiple random rays)
+7. Diffuse reflection
+8. Metallic reflection
+9. Refraction
 
 
 ## Quality improvements
 
 1. Shift logic from header `.h` files to `.cpp` files
 2. Write `unit` tests
+3. Create an `Orientation` for the camera

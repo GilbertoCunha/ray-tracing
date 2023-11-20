@@ -26,15 +26,12 @@ class Color {
          * @param g 
          * @param b 
          */
-        Color(double r, double g, double b) {
+        Color(double r, double g, double b) : rgb{r,g,b} {
             if (!(color_range.contains(r) && color_range.contains(g) && color_range.contains(b))) {
                 throw ValueError("Color channel values must lie between 0 and 1.");
-            } else {
-                rgb[0] = r;
-                rgb[1] = g;
-                rgb[2] = b;
             }
         }
+        Color() = default;
 
         // Getters for channel values
         double red() const { return rgb[0]; };

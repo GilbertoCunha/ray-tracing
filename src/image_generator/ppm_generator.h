@@ -1,7 +1,7 @@
 #ifndef PPM_GENERATOR_H
 #define PPM_GENERATOR_H
 
-#include "../camera/pixel.h"
+#include "../physics/ray.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -29,8 +29,8 @@ void write_ppm_header(ofstream& image_file, int image_height, int image_width) {
  * @param image_file The ppm image file
  * @param pixel The pixel to writ to the image
  */
-void pixel_to_ppm(ofstream& image_file, Pixel pixel) {
-    image_file << pixel.to_ppm();
+void ray_to_ppm(ofstream& image_file, const Ray& ray) {
+    image_file << ray.color.to_ppm();
 }
 
 #endif

@@ -2,10 +2,15 @@
 #define PIXEL_H
 
 #include "../materials/color.h"
+#include "../physics/vector.h"
+using namespace std;
 
-class Pixel : public Color {
+class Pixel {
     public:
-        Pixel(double r, double g, double b) : Color(r,g,b) {}
+        Color color;
+        Position position;
+        Pixel(Color c, Position p) : color{c}, position{p} {}
+        string to_ppm() { return color.to_ppm(); }
 };
 
 #endif
