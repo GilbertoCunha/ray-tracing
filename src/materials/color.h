@@ -1,6 +1,7 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include <iostream>
 #include "../exceptions/value_error.h"
 #include "../math/interval.h"
 using namespace std;
@@ -48,5 +49,13 @@ class Color {
             return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
         }
 };
+
+ostream& operator<<(ostream& cout, const Color& c) {
+    cout << "Color(";
+    cout << c.red() << ", ";
+    cout << c.green() << ", ";
+    cout << c.blue() << ')';
+    return cout;
+}
 
 #endif

@@ -50,27 +50,27 @@ class Vector {
         }
 
         // Vector mult and div
-        Vector operator*(const double x) const {
+        Vector operator*(double x) const {
             return Vector(
                 e[0] * x,
                 e[1] * x,
                 e[2] * x
             );
         }
-        Vector& operator*=(const double x) {
+        Vector& operator*=(double x) {
             e[0] *= x;
             e[1] *= x;
             e[2] *= x;
             return *this;
         }
-        Vector operator/(const double x) const {
+        Vector operator/(double x) const {
             return Vector(
                 e[0] / x,
                 e[1] / x,
                 e[2] / x
             );
         }
-        Vector& operator/=(const double x) {
+        Vector& operator/=(double x) {
             e[0] /= x;
             e[1] /= x;
             e[2] /= x;
@@ -112,7 +112,14 @@ ostream& operator<<(ostream& out, const Vector& v) {
 // They can and should operate with each other
 // Distinguishing them is just to make it more evident of the interpretation
 // using Position = Vector;
-using Direction = Vector;
+class Direction : public Vector {
+    public:
+        Direction(double x, double y, double z) : Vector(x,y,z) {};
+};
+
+ostream& operator<<(ostream& out, const Direction& v) {
+    return out << "Direction(" << v[0] << ", " << v[1] << ", " << v[2] << ')';
+}
 
 /**
  * @brief Class representing a distance.
@@ -126,6 +133,36 @@ class Position : public Vector {
     public:
         Position(double x, double y, double z) : Vector(x,y,z) {}
 
+        // Add positions and directions
+        // always returns a position
+        Position operator+(const Direction& k) const {
+            return Position(
+                (*this)[0] + k[0],
+                (*this)[1] + k[1],
+                (*this)[2] + k[2]
+            );
+        }
+        Position& operator+=(const Direction& k) {
+            (*this)[0] += k[0];
+            (*this)[1] += k[1];
+            (*this)[2] += k[2];
+            return (*this);
+        }
+        Position operator-(const Direction& k) const { 
+            return Position(
+                (*this)[0] - k[0],
+                (*this)[1] - k[1],
+                (*this)[2] - k[2]
+            );
+         }
+        Position& operator-=(const Direction& k) { 
+            (*this)[0] -= k[0];
+            (*this)[1] -= k[1];
+            (*this)[2] -= k[2];
+            return (*this);
+         }
+
+        // Calculate distance between positions
         static double distance(const Position& r1, const Position& r2) {
             return sqrt(distance_squared(r1, r2));
         }
@@ -133,5 +170,9 @@ class Position : public Vector {
             return (r1-r2).length_squared();
         }
 };
+
+ostream& operator<<(ostream& out, const Position& v) {
+    return out << "Position(" << v[0] << ", " << v[1] << ", " << v[2] << ')';
+}
 
 #endif

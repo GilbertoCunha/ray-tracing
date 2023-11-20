@@ -7,6 +7,10 @@ using namespace std;
 #include "logs/progress_bar.h"
 #include "image_generator/ppm_generator.h"
 #include "math/vector.h"
+#include "physics/ray.h"
+#include "materials/color.h"
+#include "objects/sphere.h"
+#include <optional>
 
 /**
  * @brief Main function. Generates and renders the whole scene.
@@ -15,6 +19,38 @@ using namespace std;
  */
 int main () {
 
+    // Create Ray and Sphere
+    Ray ray = Ray(
+        Position(0.0, 0.0, 0.0),
+        Direction(0.0, 0.0, 1.0),
+        Color(1.0, 1.0, 1.0)
+    );
+    Sphere sphere = Sphere(
+        Position(0.0, 0.0, 0.0),
+        1.0
+    );
+    cout << '\n';
+    cout << "###################";
+    cout << "# CREATED OBJECTS #";
+    cout << "###################";
+    cout << '\n';
+    cout << ray;
+    cout << sphere;
+
+    optional<Position> intersection = sphere.intersection_position(ray);
+    cout << '\n';
+    cout << "################";
+    cout << "# INTERSECTION #";
+    cout << "################";
+    cout << '\n';
+    if (intersection.has_value()) {
+        cout << intersection.value();
+    } else {
+        cout << "No intersection found.";
+    }
+
+
+    /*
     // Open image file to write to
     ofstream image_file;
     image_file.open("result.ppm");
@@ -43,6 +79,7 @@ int main () {
 
     // Close file
     image_file.close();
+    */
 
     return 0;
 }
