@@ -44,7 +44,7 @@ class Interval {
          * @param value The value to check if it belongs to the interval
          * @return bool Interval contains value
          */
-        bool contains(double value) {
+        bool contains(double value) const {
             bool lower_ok = (open[0] && interval[0] < value) || (!open[0] && interval[0] <= value);
             bool upper_ok = (open[1] && value < interval[1]) || (!open[1] && value <= interval[1]);
             return lower_ok && upper_ok;

@@ -36,12 +36,12 @@ class Color {
         }
 
         // Getters for channel values
-        double red() { return rgb[0]; };
-        double green() { return rgb[1]; };
-        double blue() { return rgb[2]; };
+        double red() const { return rgb[0]; };
+        double green() const { return rgb[1]; };
+        double blue() const { return rgb[2]; };
 
         // Convert to string for different file formats
-        string to_ppm() {
+        string to_ppm() const {
             int red_int = red() * 255;
             int green_int = green() * 255;
             int blue_int = blue() * 255;

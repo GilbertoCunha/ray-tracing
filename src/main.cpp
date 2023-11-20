@@ -6,6 +6,7 @@ using namespace std;
 #include "image_generator/ppm_generator.h"
 #include "logs/progress_bar.h"
 #include "image_generator/ppm_generator.h"
+#include "math/vector.h"
 
 /**
  * @brief Main function. Generates and renders the whole scene.

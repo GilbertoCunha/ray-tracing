@@ -3,12 +3,9 @@
 
 #include "../materials/color.h"
 
-class Pixel {
-    private:
-        Color color;
+class Pixel : public Color {
     public:
-        Pixel(double r, double g, double b) : color{Color(r,g,b)} {};
-        string to_ppm() { return color.to_ppm(); }
+        Pixel(double r, double g, double b) : Color(r,g,b) {}
 };
 
 #endif
