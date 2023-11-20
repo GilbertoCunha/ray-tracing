@@ -14,6 +14,7 @@ class Direction {
         double e[3];
     public:
         Direction(double x, double y, double z) : e{x,y,z} {}
+        Direction() = default;
 
         // Indexing operations
         double operator[](int i) const { return e[i]; }
@@ -95,6 +96,7 @@ class Position {
         double e[3];
     public:
         Position(double x, double y, double z) : e{x,y,z} {}
+        Position() = default;
 
         // Indexing operations
         double operator[](int i) const { return e[i]; }

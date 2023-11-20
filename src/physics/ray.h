@@ -21,6 +21,7 @@ class Ray {
 
         Ray(Position p, Direction k) : origin{p}, direction{k}, color{1.0,1.0,1.0} {};
         Ray(Position p, Direction k, Color c) : origin{p}, direction{k}, color{c} {};
+        Ray() = default;
 
         Ray find_next_ray() const { return *this; };
 };
