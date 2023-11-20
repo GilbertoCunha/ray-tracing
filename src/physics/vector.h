@@ -100,15 +100,8 @@ class Position {
         double operator[](int i) const { return e[i]; }
         double& operator[](int i) { return e[i]; }
 
-        // Addition and subtraction
-        // Position + Position or Position - Position = Direction
-        Direction operator+(const Position& p) const {
-            return Direction(
-                e[0]+p[0],
-                e[1]+p[1],
-                e[2]+p[2]
-            );
-        }
+        // Subtraction
+        // Position - Position = Direction
         Position operator-() const {
             return Position(-e[0], -e[1], -e[2]);
         }
