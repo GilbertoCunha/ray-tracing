@@ -2,7 +2,6 @@
 #define HITTABLE_H
 
 #include <optional>
-#include "../math/vector.h"
 #include "../physics/ray.h"
 
 class Hittable {

@@ -9,9 +9,3 @@ This is a project for me to do and share what I love. I hope you find it interes
 I am also thoroughly documenting everything thoroughly, so that both you and I can learn along the way.
 
 Hope you enjoy this almost as much as I do!
-
-
-# TODO:
-
-Create separate `Direction` and `Position` classes from the same abstract `Vector` class.
-Make sure they can operate with each other.

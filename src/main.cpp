@@ -6,7 +6,7 @@ using namespace std;
 #include "image_generator/ppm_generator.h"
 #include "logs/progress_bar.h"
 #include "image_generator/ppm_generator.h"
-#include "math/vector.h"
+#include "physics/vector.h"
 #include "physics/ray.h"
 #include "materials/color.h"
 #include "objects/sphere.h"
@@ -30,19 +30,17 @@ int main () {
         1.0
     );
     cout << '\n';
-    cout << "###################";
-    cout << "# CREATED OBJECTS #";
-    cout << "###################";
-    cout << '\n';
-    cout << ray;
-    cout << sphere;
+    cout << "###################" << '\n';
+    cout << "# CREATED OBJECTS #" << '\n';
+    cout << "###################" << '\n';
+    cout << ray << '\n';
+    cout << sphere << '\n';
 
     optional<Position> intersection = sphere.intersection_position(ray);
     cout << '\n';
-    cout << "################";
-    cout << "# INTERSECTION #";
-    cout << "################";
-    cout << '\n';
+    cout << "################" << '\n';
+    cout << "# INTERSECTION #" << '\n';
+    cout << "################" << '\n';
     if (intersection.has_value()) {
         cout << intersection.value();
     } else {

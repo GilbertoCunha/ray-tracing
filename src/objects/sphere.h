@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <optional>
-#include "../math/vector.h"
+#include "../physics/vector.h"
 #include "../physics/ray.h"
 #include "hittable.h"
 
@@ -63,9 +63,9 @@ class Sphere : public Hittable {
 
             // Calculate quadratic formula a, b and c coefficients
             Direction pos_diff = ray.origin - position;
-            double a = Direction::dot(ray.direction, ray.direction);
-            double b = 2 * Direction::dot(ray.direction, pos_diff);
-            double c = Direction::dot(pos_diff, pos_diff) - radius*radius;
+            double a = dot(ray.direction, ray.direction);
+            double b = 2 * dot(ray.direction, pos_diff);
+            double c = dot(pos_diff, pos_diff) - radius*radius;
 
             // Calculate the root
             // The correct root to calculate must
@@ -105,7 +105,7 @@ class Sphere : public Hittable {
 ostream& operator<<(ostream& cout, const Sphere& s) {
     cout << "Sphere(\n";
     cout << '\t' << s.position << ",\n";
-    cout << '\t' << s.radius << '\n';
+    cout << '\t' << "Radius(" << s.radius << ')' << '\n';
     cout << ')';
     return cout;
 }
