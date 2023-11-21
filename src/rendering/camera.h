@@ -32,7 +32,7 @@ class Camera {
         int image_height;
 
         Camera(
-            const Position& p = Position(0.0, 0.0, 1.0),
+            const Position& p = Position(1.0, 0.0, 0.0),
             const Direction& u = Direction(0.0, 0.0, 1.0),
             double fov = 1.0 / 3.0 * M_PI, // 60 degrees
             double aspect_ratio = 16.0 / 9.0,

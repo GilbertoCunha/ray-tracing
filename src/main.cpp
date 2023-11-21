@@ -81,7 +81,7 @@ int main () {
     GridRayShooter shooter = GridRayShooter(camera);
 
     // Create scene
-    Background background = Background(camera.position, 20.0);
+    Background background = Background(Position(0.0, 0.0, 0.0), 12.0);
     Scene scene = Scene(&background);
 
     // Render image

@@ -38,6 +38,15 @@ class Color {
         double green() const { return rgb[1]; };
         double blue() const { return rgb[2]; };
 
+        // Multiply colors (for scattering equations)
+        Color operator*(const Color& c) const {
+            return Color(
+                rgb[0] * c.rgb[0],
+                rgb[1] * c.rgb[1],
+                rgb[2] * c.rgb[2]
+            );
+        }
+
         // Convert to string for different file formats
         string to_ppm() const {
             int red_int = red() * 255.999;

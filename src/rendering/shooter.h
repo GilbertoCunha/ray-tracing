@@ -36,25 +36,29 @@ class GridRayShooter : public RayShooter {
 
             // Calculate rays for the image plane
             double angle_vert, angle_hor;
+            Direction rot_x;
             Rotation rot_vert, rot_hor;
             rays = new Ray**[c.image_height];
 
             for (int i=0; i<c.image_height; i++) {
 
+                // Rotate around y axis to find direction of pixel
                 rays[i] = new Ray*[c.image_width];
                 angle_vert = (0.5 - double(i) / c.image_height) * c.field_of_view;
                 rot_vert = Rotation(Direction(0.0, 1.0, 0.0), angle_vert);
 
                 for (int j=0; j<c.image_width; j++) {
 
+                    // Rotate around **rotated** x axis (according to previous rotation)
                     angle_hor = (double(j) / c.image_width - 0.5) * c.field_of_view * c.aspect_ratio;
-                    rot_hor = Rotation(Direction(1.0, 0.0, 0.0), angle_hor);
+                    rot_x = dot(rot_vert, Direction(1.0, 0.0, 0.0));
+                    rot_hor = Rotation(rot_x, angle_hor);
 
                     rays[i][j] = new Ray[1];
                     rays[i][j][0] = Ray(
                         c.position,
                         dot(rot_hor, dot(rot_vert, c.direction)),
-                        Color(1.0, 1.0, 1.0)
+                        Color(1.0, 1.0, 1.0) // Color of initial rays is the null element of multiplication
                     );
 
                 }
