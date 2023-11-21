@@ -184,6 +184,20 @@ double Position::length_squared() const { return dot((*this), (*this)); }
 double Direction::length() const { return sqrt(length_squared()); }
 double Direction::length_squared() const { return dot(*this, *this); }
 
+// Angle between two vectors
+double angle(const Direction& u, const Direction& v) {
+    return acos( dot(u, v) / (u.length() * v.length()) );
+}
+double angle(const Direction& u, const Position& p) {
+    return acos( dot(u, p) / (u.length() * p.length()) );
+}
+double angle(const Position& p, const Direction& u) {
+    return acos( dot(u, p) / (u.length() * p.length()) );
+}
+double angle(const Position& p, const Position& q) {
+    return acos( dot(q, p) / (q.length() * p.length()) );
+}
+
 // Cross products
 Position cross(const Position& p, const Position& q) {
     return Position(

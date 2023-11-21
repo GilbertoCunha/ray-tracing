@@ -23,7 +23,18 @@ class Ray {
         Ray(Position p, Direction k, Color c) : origin{p}, direction{k}, color{c} {};
         Ray() = default;
 
-        Ray find_next_ray() const { return *this; };
+        Ray translate(double distance) const { 
+            return Ray(
+                origin + direction*distance,
+                direction,
+                color
+            );
+         }
+         Ray set_direction(const Direction& u) const { return Ray(origin, u, color); }
+         Ray set_color(const Color& c) const { return Ray(origin, direction, c); }
+         Ray scatter(double distance, const Direction& u, const Color& c) const {
+            return translate(distance).set_direction(u).set_color(c);
+         }
 };
 
 ostream& operator<<(ostream& cout, const Ray& ray) {

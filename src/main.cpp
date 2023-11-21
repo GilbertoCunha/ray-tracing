@@ -2,12 +2,10 @@
 #include <fstream>
 using namespace std;
 
-#include "camera/camera.h"
-#include "image_generator/ppm_generator.h"
-#include "logs/progress_bar.h"
-#include "physics/ray.h"
-#include "physics/transformation.h"
-#include "objects/sphere.h"
+#include "rendering/camera.h"
+#include "rendering/shooter.h"
+#include "rendering/scene.h"
+#include "objects/background.h"
 #include <optional>
 
 /**
@@ -77,8 +75,17 @@ int main () {
     cout << "##################" << '\n';
     cout << dot(r, d) << '\n';
     */
+
+    // Create camera and ray shooter
     Camera camera = Camera();
-    camera.render("result.ppm");
+    GridRayShooter shooter = GridRayShooter(camera);
+
+    // Create scene
+    Background background = Background(camera.position, 20.0);
+    Scene scene = Scene(&background);
+
+    // Render image
+    scene.render(shooter, 10, "result.ppm");
 
     return 0;
 }

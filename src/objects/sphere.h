@@ -9,12 +9,13 @@
 
 class Sphere : public Hittable {
     public:
-        Position position;
+        Position center;
         double radius;
-        Sphere(Position position, double radius) : position{position}, radius{radius} {};
+        Sphere(Position center, double radius) : center{center}, radius{radius} {};
+        Sphere() = default;
 
         // Hittable methods
-        optional<Ray> scatter_ray_on_hit(const Ray& ray) const override {
+        Ray scatter_ray_on_hit(const Ray& ray) const override {
 
             // Find ray intersection position
             double linear_coeff;
@@ -27,11 +28,11 @@ class Sphere : public Hittable {
 
             // For the moment, perfectly reflect the ray
 
-            return nullopt;
+            return Ray();
         }
 
         /**
-         * @brief Calculates the (possible) intersection point between a ray and a sphere
+         * @brief Calculates the (possible) intersection distance between a ray and a sphere
          * 
          * Let he ray is parameterized as:
          * => Ray = Origin + t * Direction
@@ -57,12 +58,12 @@ class Sphere : public Hittable {
          * - If there is more than one solution, choose the closest (smallest t)
          * 
          * @param ray The incoming ray
-         * @return optional<Position> The possible intersection point in the sphere
+         * @return optional<double> The possible intersection distance from ray position to sphere
          */
-        optional<Position> intersection_position(const Ray& ray) const {
+        optional<double> intersection_distance(const Ray& ray) const override {
 
             // Calculate quadratic formula a, b and c coefficients
-            Direction pos_diff = ray.origin - position;
+            Direction pos_diff = ray.origin - center;
             double a = dot(ray.direction, ray.direction);
             double b = 2 * dot(ray.direction, pos_diff);
             double c = dot(pos_diff, pos_diff) - radius*radius;
@@ -92,10 +93,7 @@ class Sphere : public Hittable {
             }
 
             // Calculate intersection position
-            optional<Position> intersection = nullopt;
-            if (root.has_value()) {
-                intersection = ray.origin + ray.direction * root.value();
-            }
+            optional<double> intersection = root.has_value() ? root.value() : optional<double>{};
 
             return intersection;
         }
@@ -104,7 +102,7 @@ class Sphere : public Hittable {
 
 ostream& operator<<(ostream& cout, const Sphere& s) {
     cout << "Sphere(\n";
-    cout << '\t' << s.position << ",\n";
+    cout << '\t' << s.center << ",\n";
     cout << '\t' << "Radius(" << s.radius << ')' << '\n';
     cout << ')';
     return cout;

@@ -41,3 +41,9 @@ Hope you enjoy this almost as much as I do!
         - `Background` (hittable `Sphere`)
         - `Spheres`
         - `Floor`
+5. Separate concerns between `Object` and `Material`:
+    - A `Material` should be described by a **BRDF** (bi-directional reflectance distribution function).
+    This BRDF describes how likely a pair of incoming and outgoing light rays are.
+    - An `ScatterSampler` object should define how to choose an outgoing ray given an incoming ray and a `Material` (defined by a **BRDF**).
+    - An `Object` should be instanciated with a `Material` and a `ScatterSampler`. The `Object`'s concern is now only **geometrical**: calculate ray intersections.
+    - The `Color` of the outgoing ray is calculated using multiplication.
