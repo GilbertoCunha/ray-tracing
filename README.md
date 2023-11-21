@@ -18,9 +18,9 @@ Hope you enjoy this almost as much as I do!
 1. ~~Camera~~
 2. ~~Shooting rays~~
 3. ~~Background~~
-4. Color sphere
+4. ~~Color sphere~~
 5. ~~Floor~~ (made it embedded into background)
-6. Point `4` of `Quality improvements`
+6. Improve Documentation
 7. Anti aliasing (shoot multiple random rays)
 8. Diffuse reflection
 9. Metallic reflection
@@ -32,7 +32,7 @@ Hope you enjoy this almost as much as I do!
 1. Shift logic from header `.h` files to `.cpp` files
 2. Write `unit` tests
 3. Create an `Orientation` for the camera
-4. Better abstraction in shooting the rays for the camera:
+4. ~~Better abstraction in shooting the rays for the camera:~~
     - Create `Camera` object just with its properties
     - Create `Shooter` object to define the rays to trace
     - Create `Scene` object that holds the whole scene together:
