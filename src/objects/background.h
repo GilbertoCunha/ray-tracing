@@ -5,7 +5,7 @@
 
 class Background : public Sphere {
     public:
-        Background(const Position& p, double radius) : Sphere(p, radius) {}
+        Background(const Position& p, double radius) : Sphere(p, radius, Color(1.0, 1.0, 1.0)) {}
         Background() = default;
 
         /**

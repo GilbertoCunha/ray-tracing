@@ -3,32 +3,20 @@
 
 #include <iostream>
 #include <optional>
-#include "../physics/vector.h"
 #include "../physics/ray.h"
 #include "hittable.h"
 
 class Sphere : public Hittable {
     public:
         Position center;
+        Color color;
         double radius;
-        Sphere(Position center, double radius) : center{center}, radius{radius} {};
+        Sphere(const Position& center, double radius, const Color& c) : center{center}, radius{radius}, color{c} {};
         Sphere() = default;
 
         // Hittable methods
         Ray scatter_ray_on_hit(const Ray& ray) const override {
-
-            // Find ray intersection position
-            double linear_coeff;
-
-            // Find ray intersection normal
-            // if ray is inside sphere, normal points inward
-            // if ray is outside sphere, normal points outward
-            // TODO: make sure intersection position STAYS inside
-            // or outside of object to avoid double collision
-
-            // For the moment, perfectly reflect the ray
-
-            return Ray();
+            return Ray(ray.origin, ray.direction, ray.color*color);
         }
 
         /**
@@ -103,7 +91,8 @@ class Sphere : public Hittable {
 ostream& operator<<(ostream& cout, const Sphere& s) {
     cout << "Sphere(\n";
     cout << '\t' << s.center << ",\n";
-    cout << '\t' << "Radius(" << s.radius << ')' << '\n';
+    cout << '\t' << "Radius(" << s.radius << ')' << ",\n";
+    cout << '\t' << s.color << '\n';
     cout << ')';
     return cout;
 }

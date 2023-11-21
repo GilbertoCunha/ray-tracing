@@ -37,27 +37,19 @@ class Scene {
             // Write the color of each pixel to the image
             Color pixel_color;
             Color pixel_colors[shooter.rays_per_pixel];
-            // cout << "Entering render loop\n";
             for (int i=0; i<shooter.image_height; ++i) {
                 progress_bar(cout, i+1, shooter.image_height);
                 for (int j=0; j<shooter.image_width; ++j) {
                     for (int k=0; k<shooter.rays_per_pixel; ++k) {
-                        // cout << "Calculating colors for pixel " << i << ", " << j << ", " << k << '\n';
                         pixel_colors[k] = calculate_ray_color(shooter.rays[i][j][k], max_hits);
-                        // cout << "Pixel colors calculated.\n";
                     }
                     pixel_color = average_colors(pixel_colors, shooter.rays_per_pixel);
-                    // cout << "Pixel colors averaged.\n";
                     image_file << pixel_color.to_ppm() << ' ';
-                    // cout << "Pixel colors converted to ppm.\n\n";
                 }
                 image_file << '\n';
-                // cout << "\nFINISHED PROCESSING IMAGE ROW.\n";
             }
-            // cout << "\nFINISHED PROCESSING IMAGE.\n";
 
             image_file.close();
-            // cout << "\nCLOSED IMAGE FILE.\n";
         }
 
         static Color average_colors(const Color color[], int size) {
@@ -77,48 +69,35 @@ class Scene {
             optional<double> closest;
             optional<double> distance;
             bool go = true;
+            int num_objects = objects.size();
 
             // Calculate ray color based off multiple reflections
             while(go) {
 
                 // Calculate closest intersection
-                // cout << "Finding intersections\n";
                 closest = nullopt;
-                for (int i=0; i<objects.size(); i++) {
-                    // cout << "Finding intersections for object " << i << '\n';
+                for (int i=0; i<num_objects; i++) {
                     distance = (*objects[i]).intersection_distance(ray);
 
-                    if (distance.has_value()) {
+                    bool distance_value_is_smaller = distance.has_value() && closest.has_value() && distance.value() < closest.value();
+                    bool closest_has_no_value = distance.has_value() && (!closest.has_value());
 
-                        // cout << "Distance:" << distance.value() << '\n';
-                        // Update closest distance
-                        if ((closest.has_value() && distance.value() < closest.value()) || !closest.has_value()) {
-                            closest = distance;
-                            closest_index = i;
-                            // cout << "Updated closest distance to " << distance.value() << '\n';
-                            // cout << "Updated closest index to " << closest_index << '\n'; 
-                        }
-
-                        // Stop if hit background
-                        if (typeid(*objects[i]) == typeid(Background)) {
-                            // cout << "Object hit was Background. Stopping ray.\n";
-                            go = false;
-                            break;
-                        }
-                    } /* else {
-                        cout << "==> No intersection\n";
-                    }*/
+                    if (distance_value_is_smaller || closest_has_no_value) {
+                        closest = distance;
+                        closest_index = i;
+                    }
 
                 }
 
                 // Refactor color of ray
                 ray = ray.translate(closest.value());
                 ray = (*objects[closest_index]).scatter_ray_on_hit(ray);
-                // cout << "Scattered ray.\n";
 
                 // Stop if max hits have been reached
-                if (max_hits == 0) go = false;
                 max_hits -= 1;
+                bool max_hits_reached = max_hits == 0;
+                bool hit_background = typeid(*objects[closest_index]) == typeid(Background);
+                if (max_hits_reached || hit_background) go = false;
             }
 
             return ray.color;

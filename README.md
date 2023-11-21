@@ -17,9 +17,9 @@ Hope you enjoy this almost as much as I do!
 
 1. ~~Camera~~
 2. ~~Shooting rays~~
-3. Background
+3. ~~Background~~
 4. Color sphere
-5. Floor
+5. ~~Floor~~ (made it embedded into background)
 6. Point `4` of `Quality improvements`
 7. Anti aliasing (shoot multiple random rays)
 8. Diffuse reflection
