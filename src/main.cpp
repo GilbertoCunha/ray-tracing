@@ -6,6 +6,7 @@ using namespace std;
 #include "rendering/shooter.h"
 #include "rendering/scene.h"
 #include "objects/background.h"
+#include "objects/sphere.h"
 #include <optional>
 
 /**
@@ -20,8 +21,8 @@ int main () {
     GridRayShooter shooter = GridRayShooter(camera);
 
     // Create scene
-    Background background = Background(Position(0.0, 0.0, 0.0), 12.0);
-    Scene scene = Scene(&background);
+    Background background = Background(camera);
+    Scene scene = Scene(background);
 
     // Add sphere to the scene
     Sphere sphere = Sphere(

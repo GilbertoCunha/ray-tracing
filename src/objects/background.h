@@ -1,15 +1,18 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
 
-#include "sphere.h"
+#include "hittable.h"
+#include "../rendering/camera.h"
 
-class Background : public Sphere {
+class Background : Hittable {
     public:
-        Background(const Position& p, double radius) : Sphere(p, radius, Color(1.0, 1.0, 1.0)) {}
+        Position center;
+        Background(const Camera& c) : center{c.position} {}
         Background() = default;
+        ~Background() = default;
 
         /**
-         * @brief Changes the color of the ray who made contact.
+         * @brief Changes the color of the ray who got to the background.
          * Does not change any other property.
          * When rendering the scene, hitting the background should be a stopping
          * condition to not keep shooting the ray.
@@ -17,22 +20,23 @@ class Background : public Sphere {
          * With a purple floor (x < 0)
          * 
          * @param ray the ray that made contact with the background
-         * @return Ray the ray with the color of the background
+         * @return Ray the ray after hitting the background (color shifted)
          */
         Ray scatter_ray_on_hit(const Ray& ray) const override {
             Color color;
-            Direction u = ray.origin - center;
-            double x = u[0] / u.length();
-
-            if (x < 0) {
-                color = Color(0.6, 0.4, 0.7);
-            } else {
-                double blue = 1 - min(max(0.5 * (x + 1), 0.0), 1.0);
-                color = Color(blue, blue, 1.0);
-            }
-
+            double x = ray.direction[0] / ray.direction.length();
+            double blue = 1 - min(max(0.5 * (x + 1), 0.0), 1.0);
+            color = Color(blue, blue, 1.0);
             return Ray(ray.origin, ray.direction, ray.color*color);
         }
+
+        /**
+         * @brief Ray never directly hits background, this function returns null
+         * 
+         * @param ray Incoming ray
+         * @return optional<double> null
+         */
+        optional<double> intersection_distance(const Ray& ray) const override { return nullopt; }
 
 };
 

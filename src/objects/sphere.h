@@ -13,6 +13,7 @@ class Sphere : public Hittable {
         double radius;
         Sphere(const Position& center, double radius, const Color& c) : center{center}, radius{radius}, color{c} {};
         Sphere() = default;
+        ~Sphere() = default;
 
         // Hittable methods
         Ray scatter_ray_on_hit(const Ray& ray) const override {

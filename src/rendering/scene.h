@@ -10,10 +10,10 @@ using namespace std;
 
 class Scene {
     public:
-        // Background background;
+        Background background;
         vector<Hittable*> objects;
 
-        Scene(Background* b) { objects.push_back(b); }
+        Scene(const Background& b) : background{background} {}
         Scene() = default;
         /* TODO: I get 'free(): invalid pointer' error if this is not commented
         ~Scene() { 
@@ -68,13 +68,13 @@ class Scene {
             int closest_index;
             optional<double> closest;
             optional<double> distance;
-            bool go = true;
+            bool max_hits_reached=false, hit_background=false, go = true;
             int num_objects = objects.size();
 
             // Calculate ray color based off multiple reflections
             while(go) {
 
-                // Calculate closest intersection
+                // Calculate closest intersection to objects
                 closest = nullopt;
                 for (int i=0; i<num_objects; i++) {
                     distance = (*objects[i]).intersection_distance(ray);
@@ -86,17 +86,22 @@ class Scene {
                         closest = distance;
                         closest_index = i;
                     }
-
                 }
 
-                // Refactor color of ray
-                ray = ray.translate(closest.value());
-                ray = (*objects[closest_index]).scatter_ray_on_hit(ray);
+                // If ray hits nothing, hit background
+                if (!closest.has_value()) {
+                    hit_background = true;
+                    ray = background.scatter_ray_on_hit(ray);
+                } else {
+                    // Refactor color of ray
+                    ray = ray.translate(closest.value());
+                    ray = (*objects[closest_index]).scatter_ray_on_hit(ray);
+                }
 
                 // Stop if max hits have been reached
+                // or if ray hit background
                 max_hits -= 1;
-                bool max_hits_reached = max_hits == 0;
-                bool hit_background = typeid(*objects[closest_index]) == typeid(Background);
+                max_hits_reached = max_hits == 0;
                 if (max_hits_reached || hit_background) go = false;
             }
 
