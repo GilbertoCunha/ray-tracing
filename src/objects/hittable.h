@@ -8,9 +8,8 @@
 
 class Hittable {
     public:
-        Color albedo;
         Material* material;
-        Hittable(Color c, Material& m) : albedo{c}, material{&m} {}
+        Hittable(Material& m) : material{&m} {}
         virtual ~Hittable() = default;
 
         /**
@@ -46,7 +45,7 @@ class Hittable {
          * @param r Incoming ray. Its position should be the point of contact with the object.
          * @return Ray the scattered ray: direction and color have been changed.
          */
-        Ray scatter_ray_on_hit(const Ray& r) const {
+        Ray scatter_ray(const Ray& r) const {
             return Ray(
                 r.origin,
                 material->scatter_direction(r.direction, calculate_normal(r)),

@@ -16,15 +16,7 @@ class Scene {
 
         Scene(const Background& b) : background{background} {}
         Scene() = default;
-        /* TODO: I get 'free(): invalid pointer' error if this is not commented
-        ~Scene() { 
-            for (Hittable* object : objects) {
-                if (object != nullptr) {
-                    delete object;
-                    object = nullptr;
-                }
-            }
-        }*/
+        ~Scene() = default;
 
         void add_object(Hittable& object) {
             // TODO: Check object is not background
@@ -80,18 +72,15 @@ class Scene {
             if (!closest.has_value()) { // Ray hit no objects
                 return background.get_color(r);
             } else { // Ray has hit an object
-                // Get index of nearest object and distance to it
                 int index = get<0>(closest.value());
                 double distance = get<1>(closest.value());
-                // Scatter ray
-                Ray new_ray = r.translate(distance);
-                new_ray = objects[index]->scatter_ray_on_hit(r);
+                Ray new_ray = objects[index]->scatter_ray(r.translate(distance));
                 return calculate_ray_color(new_ray, max_hits-1);
             }
         }
 
         /**
-         * @brief Return a tuple of closest object index and distance. Returns nullopt of none are hit.
+         * @brief Return a tuple of closest object index and distance. Returns nullopt if none are hit.
          * 
          * @param r The incoming ray
          * @return optional<tuple<int,double>> index and distance of closest object hit (if any)
@@ -101,14 +90,12 @@ class Scene {
             optional<double> distance = nullopt;
 
             for (int i=0; i<objects.size(); i++) {
-                distance = (*objects[i]).intersection_distance(r);
+                distance = objects[i]->intersection_distance(r);
 
                 bool distance_value_is_smaller = distance.has_value() && closest.has_value() && distance.value() < get<1>(closest.value());
                 bool closest_has_no_value = distance.has_value() && (!closest.has_value());
 
-                if (distance_value_is_smaller || closest_has_no_value) {
-                    closest = tuple(i, distance.value());
-                }
+                if (distance_value_is_smaller || closest_has_no_value) closest = tuple(i, distance.value());
             }
 
             return closest;

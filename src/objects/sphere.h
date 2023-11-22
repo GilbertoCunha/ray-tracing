@@ -13,7 +13,7 @@ class Sphere : public Hittable {
         Position center;
         double radius;
         Sphere(const Position& position, double radius, Material& material) :
-            center{position}, radius{radius}, Hittable(albedo, material) {}
+            center{position}, radius{radius}, Hittable(material) {}
         Sphere() = default;
         ~Sphere() = default;
 
@@ -24,15 +24,9 @@ class Sphere : public Hittable {
          * @return Direction Sphere normal at intersection
          */
         Direction calculate_normal(const Ray& r) const override {
-            // Calculate outwards normal
-            Direction normal = (r.origin - center);
-            normal = normal.normalize();
-
             // If ray is inside sphere, invert normal (point it inward)
-            int is_inside = dot(normal, r.direction) < 0 ? 1 : -1;
-            normal = normal * is_inside;
-
-            return normal;
+            Direction normal = (r.origin - center).normalize();
+            return dot(normal, r.direction) < 0 ? normal : -normal;
         }
 
         /**
