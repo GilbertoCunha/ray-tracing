@@ -33,7 +33,6 @@ int main () {
     );
     AntiAliasingRayShooter shooter = AntiAliasingRayShooter(camera, rays_per_pixel);
     // GridRayShooter shooter = GridRayShooter(camera);
-    cout << "Created shooter\n";
 
     // Create scene
     Background background = Background(camera);
@@ -52,10 +51,9 @@ int main () {
     );
     scene.add_object(&sphere1);
     scene.add_object(&sphere2);
-    cout << "Created scene\n";
 
     // Render image
-    cout << "Starting render\n";
+    cout << "\nStarting render\n";
     scene.render(shooter, multi_scattering, "result.ppm");
 
     return 0;

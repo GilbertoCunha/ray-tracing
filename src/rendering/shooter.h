@@ -42,7 +42,10 @@ class GridRayShooter : public RayShooter {
             Rotation rot_vert, rot_hor;
             rays = new Ray**[c.image_height];
 
+            cout << "Creating camera rays...\n";
             for (int i=0; i<c.image_height; i++) {
+
+                progress_bar(cout, i+1, image_height);
 
                 // Rotate around y axis to find direction of pixel
                 rays[i] = new Ray*[c.image_width];
@@ -89,7 +92,7 @@ class AntiAliasingRayShooter : public RayShooter {
             Rotation rot_vert, rot_hor;
             rays = new Ray**[c.image_height];
 
-            cout << "Creating pixel rays...\n";
+            cout << "Creating camera rays...\n";
             for (int i=0; i<c.image_height; i++) {
 
                 progress_bar(cout, i+1, image_height);
