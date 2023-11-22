@@ -54,13 +54,8 @@ class Color {
             );
         }
 
-        // Convert to string for different file formats
-        string to_ppm() const {
-            int red_int = red() * 255.999;
-            int green_int = green() * 255.999;
-            int blue_int = blue() * 255.999;
-            return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
-        }
+        // Convert image to different file formats
+        string to_ppm() const;
 };
 
 Color sum_colors(const Color& c1, const Color& c2, double weight1=0.5, double weight2=0.5) {
@@ -80,6 +75,23 @@ ostream& operator<<(ostream& cout, const Color& c) {
     cout << c.green() << ", ";
     cout << c.blue() << ')';
     return cout;
+}
+
+Color gamma_correction(const Color& c) {
+    return Color(
+        sqrt(c.red()),
+        sqrt(c.green()),
+        sqrt(c.blue())
+    );
+}
+
+// Convert to string for ppm images
+string Color::to_ppm() const {
+    Color corrected = gamma_correction(*this);
+    int red_int = corrected.red() * 255.999;
+    int green_int = corrected.green() * 255.999;
+    int blue_int = corrected.blue() * 255.999;
+    return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
 }
 
 #endif
