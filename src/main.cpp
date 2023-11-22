@@ -16,9 +16,24 @@ using namespace std;
  */
 int main () {
 
+    // Global variables
+    int rays_per_pixel = 10;
+    int multi_scattering = 10;
+    int image_height = 720;
+    double fov = 0.33*M_PI;
+    double aspect_ratio = 16.0 / 9.0;
+
     // Create camera and ray shooter
-    Camera camera = Camera();
-    GridRayShooter shooter = GridRayShooter(camera);
+    Camera camera = Camera(
+        Position(1.0, 0.0, 0.0),
+        Direction(0.0, 0.0, 1.0),
+        fov=fov,
+        aspect_ratio=aspect_ratio,
+        image_height=image_height
+    );
+    AntiAliasingRayShooter shooter = AntiAliasingRayShooter(camera, rays_per_pixel);
+    // GridRayShooter shooter = GridRayShooter(camera);
+    cout << "Created shooter\n";
 
     // Create scene
     Background background = Background(camera);
@@ -37,9 +52,11 @@ int main () {
     );
     scene.add_object(&sphere1);
     scene.add_object(&sphere2);
+    cout << "Created scene\n";
 
     // Render image
-    scene.render(shooter, 20, "result.ppm");
+    cout << "Starting render\n";
+    scene.render(shooter, multi_scattering, "result.ppm");
 
     return 0;
 }
