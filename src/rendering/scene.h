@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <vector>
+#include <tuple>
 #include "../logs/progress_bar.h"
 #include "../objects/background.h"
 #include "../objects/hittable.h"
@@ -25,9 +26,9 @@ class Scene {
             }
         }*/
 
-        void add_object(Hittable* object) { 
+        void add_object(Hittable& object) {
             // TODO: Check object is not background
-            objects.push_back(object);
+            objects.push_back(&object);
         }
         
         void render(const RayShooter& shooter, int max_hits, string image_path) const {
@@ -53,60 +54,64 @@ class Scene {
             image_file.close();
         }
 
-        static Color average_colors(const Color color[], int size) {
+        static Color average_colors(const Color colors[], int size) {
             double r=0, g=0, b=0;
             for (int i=0; i<size; ++i) {
-                r += color[i].red();
-                g += color[i].green();
-                b += color[i].blue();
+                r += colors[i].red();
+                g += colors[i].green();
+                b += colors[i].blue();
             }
             return Color(r/size, g/size, b/size);
         }
 
+        /**
+         * @brief Calculates the color of a ray
+         * 
+         * @param r Incoming ray
+         * @param max_hits the maximum number of collisions before stopping the render
+         * @return Color color of the ray
+         */
         Color calculate_ray_color(const Ray& r, int max_hits) const {
-
-            Ray ray = r;
-            int closest_index;
-            optional<double> closest;
-            optional<double> distance;
-            bool max_hits_reached=false, hit_background=false, go = true;
-            int num_objects = objects.size();
-
-            // Calculate ray color based off multiple reflections
-            while(go) {
-
-                // Calculate closest intersection to objects
-                closest = nullopt;
-                for (int i=0; i<num_objects; i++) {
-                    distance = (*objects[i]).intersection_distance(ray);
-
-                    bool distance_value_is_smaller = distance.has_value() && closest.has_value() && distance.value() < closest.value();
-                    bool closest_has_no_value = distance.has_value() && (!closest.has_value());
-
-                    if (distance_value_is_smaller || closest_has_no_value) {
-                        closest = distance;
-                        closest_index = i;
-                    }
-                }
-
-                // If ray hits nothing, hit background
-                if (!closest.has_value()) {
-                    hit_background = true;
-                    ray = background.scatter_ray_on_hit(ray);
-                } else {
-                    // Refactor color of ray
-                    ray = ray.translate(closest.value());
-                    ray = (*objects[closest_index]).scatter_ray_on_hit(ray);
-                }
-
-                // Stop if max hits have been reached
-                // or if ray hit background
-                max_hits -= 1;
-                max_hits_reached = max_hits == 0;
-                if (max_hits_reached || hit_background) go = false;
+            if (max_hits == 0) {
+                return Color(0.0, 0.0, 0.0);
             }
 
-            return ray.color;
+            optional<tuple<int, double>> closest = closest_object(r);
+            if (!closest.has_value()) { // Ray hit no objects
+                return background.get_color(r);
+            } else { // Ray has hit an object
+                // Get index of nearest object and distance to it
+                int index = get<0>(closest.value());
+                double distance = get<1>(closest.value());
+                // Scatter ray
+                Ray new_ray = r.translate(distance);
+                new_ray = objects[index]->scatter_ray_on_hit(r);
+                return calculate_ray_color(new_ray, max_hits-1);
+            }
+        }
+
+        /**
+         * @brief Return a tuple of closest object index and distance. Returns nullopt of none are hit.
+         * 
+         * @param r The incoming ray
+         * @return optional<tuple<int,double>> index and distance of closest object hit (if any)
+         */
+        optional<tuple<int,double>> closest_object(const Ray& r) const {
+            optional<tuple<double, int>> closest = nullopt;
+            optional<double> distance = nullopt;
+
+            for (int i=0; i<objects.size(); i++) {
+                distance = (*objects[i]).intersection_distance(r);
+
+                bool distance_value_is_smaller = distance.has_value() && closest.has_value() && distance.value() < get<1>(closest.value());
+                bool closest_has_no_value = distance.has_value() && (!closest.has_value());
+
+                if (distance_value_is_smaller || closest_has_no_value) {
+                    closest = tuple(i, distance.value());
+                }
+            }
+
+            return closest;
         }
 
 };

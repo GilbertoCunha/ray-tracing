@@ -19,15 +19,15 @@ using namespace std;
 int main () {
 
     // Global variables
-    int rays_per_pixel = 10;
-    int multi_scattering = 10;
+    int rays_per_pixel = 50;
+    int multi_scattering = 8;
     int image_height = 720;
     double fov = 0.33*M_PI;
     double aspect_ratio = 16.0 / 9.0;
 
     // Create camera and ray shooter
     Camera camera = Camera(
-        Position(2.0, 0.0, 0.0),
+        Position(0.0, 0.0, 0.0),
         Direction(0.0, 0.0, 1.0),
         fov=fov,
         aspect_ratio=aspect_ratio,
@@ -40,35 +40,19 @@ int main () {
     Background background = Background(camera);
     Scene scene = Scene(background);
 
-    // Create materials for objects
-    Metal metal = Metal();
-    Lambertian lambertian = Lambertian();
-
     // Add sphere to the scene
-    Sphere sphere1 = Sphere(
-        Position(1.0, 1.0, 5.0),
-        1.0,
-        Color(1.0, 1.0, 1.0),
-        0.999,
-        lambertian
-    );
-    Sphere sphere2 = Sphere(
-        Position(1.0, -4.0, 8.0),
-        1.0,
-        Color(1.0, 1.0, 1.0),
-        0.6,
-        lambertian
-    );
-    Sphere sphere3 = Sphere(
-        Position(-1000.0, 0.0, 0.0),
-        1000.0,
-        Color(1.0, 1.0, 1.0),
-        0.6,
-        lambertian
-    );
-    scene.add_object(&sphere1);
-    scene.add_object(&sphere2);
-    scene.add_object(&sphere3);
+    Lambertian material_big    = Lambertian(Color(0.8, 0.8, 0.0));
+    Metal material_left             = Metal(Color(0.8, 0.8, 0.8));
+    Lambertian material_center = Lambertian(Color(0.7, 0.3, 0.3));
+    Metal material_right            = Metal(Color(0.8, 0.6, 0.2));
+    Sphere sphere_big    = Sphere(Position(-100.5,  0.0,  2.0), 100.0, material_big);
+    Sphere sphere_left   = Sphere(Position(   0.0, -1.0,  2.0),   0.5, material_left);
+    Sphere sphere_center = Sphere(Position(   0.0,  0.0,  2.0),   0.5, material_center);
+    Sphere sphere_right  = Sphere(Position(   0.0,  1.0,  2.0),   0.5, material_right);
+    scene.add_object(sphere_big);
+    scene.add_object(sphere_center);
+    scene.add_object(sphere_left);
+    scene.add_object(sphere_right);
 
     // Render image
     cout << "\nStarting render\n";

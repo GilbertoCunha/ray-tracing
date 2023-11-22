@@ -8,9 +8,9 @@
 
 class Hittable {
     public:
-        double albedo;
-        Color color;
+        Color albedo;
         Material* material;
+        Hittable(Color c, Material& m) : albedo{c}, material{&m} {}
         virtual ~Hittable() = default;
 
         /**
@@ -31,6 +31,14 @@ class Hittable {
         virtual optional<double> intersection_distance(const Ray& ray) const = 0;
 
         /**
+         * @brief Function to display the object
+         * 
+         * @param cout 
+         * @return ostream& 
+         */
+        virtual ostream& operator<<(ostream& cout) const = 0;
+
+        /**
          * @brief Function that scatters a ray that HAS HIT the object.
          * This implies changing the ray's direction and color.
          * It's position does not change since it already hit the object.
@@ -42,7 +50,7 @@ class Hittable {
             return Ray(
                 r.origin,
                 material->scatter_direction(r.direction, calculate_normal(r)),
-                random_uniform(0.0, 1.0) > albedo ? color : r.color
+                material->scatter_color(r.color)
             );
         };
 

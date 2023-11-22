@@ -11,22 +11,9 @@
 class Sphere : public Hittable {
     public:
         Position center;
-        Color color;
         double radius;
-        Sphere(
-            const Position& position,
-            double radius,
-            const Color& color,
-            double albedo,
-            Material& material
-        ) :
-            center{position},
-            radius{radius},
-            color{color}
-        {
-            this->albedo = albedo;
-            this->material = &material;
-        }
+        Sphere(const Position& position, double radius, Material& material) :
+            center{position}, radius{radius}, Hittable(albedo, material) {}
         Sphere() = default;
         ~Sphere() = default;
 
@@ -39,7 +26,7 @@ class Sphere : public Hittable {
         Direction calculate_normal(const Ray& r) const override {
             // Calculate outwards normal
             Direction normal = (r.origin - center);
-            normal = normal / normal.length();
+            normal = normal.normalize();
 
             // If ray is inside sphere, invert normal (point it inward)
             int is_inside = dot(normal, r.direction) < 0 ? 1 : -1;
@@ -115,15 +102,15 @@ class Sphere : public Hittable {
             return intersection;
         }
 
-};
+        ostream& operator<<(ostream& cout) const override {
+            cout << "Sphere(\n";
+            cout << '\t' << center << ",\n";
+            cout << '\t' << "Radius(" << radius << ')' << ",\n";
+            cout << '\t' << material << '\n';
+            cout << ')';
+            return cout;
+        }
 
-ostream& operator<<(ostream& cout, const Sphere& s) {
-    cout << "Sphere(\n";
-    cout << '\t' << s.center << ",\n";
-    cout << '\t' << "Radius(" << s.radius << ')' << ",\n";
-    cout << '\t' << s.color << '\n';
-    cout << ')';
-    return cout;
-}
+};
 
 #endif

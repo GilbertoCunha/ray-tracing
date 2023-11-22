@@ -12,22 +12,17 @@ class Background {
         ~Background() = default;
 
         /**
-         * @brief Changes the color of the ray who got to the background.
-         * Does not change any other property.
-         * When rendering the scene, hitting the background should be a stopping
-         * condition to not keep shooting the ray.
-         * At the moment, the background is a blue gradient, from top to bottom (x axis points up).
-         * With a purple floor (x < 0)
+         * @brief Calculates color of background
          * 
          * @param ray the ray that made contact with the background
          * @return Ray the ray after hitting the background (color shifted)
          */
-        Ray scatter_ray_on_hit(const Ray& ray) const {
+        Color get_color(const Ray& ray) const {
             Color color;
             double x = ray.direction[0] / ray.direction.length();
             double blue = 1 - min(max(0.5 * (x + 1), 0.0), 1.0);
             color = Color(blue, blue, 1.0);
-            return Ray(ray.origin, ray.direction, ray.color*color);
+            return ray.color*color;
         }
 };
 
