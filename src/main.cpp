@@ -31,7 +31,7 @@ int main () {
         Color(0.0, 1.0, 0.0)
     );
     Sphere sphere2 = Sphere(
-        Position(1.0, -2.0, 8.0),
+        Position(1.0, -4.0, 8.0),
         1.5,
         Color(1.0, 0.0, 0.0)
     );

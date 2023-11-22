@@ -49,10 +49,9 @@ class GridRayShooter : public RayShooter {
 
                 for (int j=0; j<c.image_width; j++) {
 
-                    // Rotate around **rotated** x axis (according to previous rotation)
+                    // Rotate around x axis
                     angle_hor = (0.5 - double(j) / c.image_width) * c.field_of_view * c.aspect_ratio;
-                    rot_x = dot(rot_vert, Direction(1.0, 0.0, 0.0));
-                    rot_hor = Rotation(rot_x, angle_hor);
+                    rot_hor = Rotation(Direction(1.0, 0.0, 0.0), angle_hor);
 
                     rays[i][j] = new Ray[1];
                     rays[i][j][0] = Ray(
