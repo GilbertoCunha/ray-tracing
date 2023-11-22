@@ -25,15 +25,21 @@ int main () {
     Scene scene = Scene(background);
 
     // Add sphere to the scene
-    Sphere sphere = Sphere(
-        Position(1.0, 0.0, 5.0),
+    Sphere sphere1 = Sphere(
+        Position(1.0, 1.0, 5.0),
+        1.5,
+        Color(0.0, 1.0, 0.0)
+    );
+    Sphere sphere2 = Sphere(
+        Position(1.0, -2.0, 8.0),
         1.5,
         Color(1.0, 0.0, 0.0)
     );
-    scene.add_object(&sphere);
+    scene.add_object(&sphere1);
+    scene.add_object(&sphere2);
 
     // Render image
-    scene.render(shooter, 1, "result.ppm");
+    scene.render(shooter, 20, "result.ppm");
 
     return 0;
 }

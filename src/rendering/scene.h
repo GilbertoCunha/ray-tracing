@@ -29,6 +29,7 @@ class Scene {
             // TODO: Check object is not background
             objects.push_back(object);
         }
+        
         void render(const RayShooter& shooter, int max_hits, string image_path) const {
             ofstream image_file;
             image_file.open(image_path);

@@ -34,7 +34,7 @@ class Direction {
             e[2] += u[2];
             return (*this);
         }
-        Direction operator-() {
+        Direction operator-() const {
             return Direction(-e[0], -e[1], -e[2]);
         }
         Direction operator-(const Direction& u) const {
@@ -180,7 +180,7 @@ double dot(const Direction& u, const Position& p) {
 
 // Length operations
 double Position::length() const { return sqrt(length_squared()); }
-double Position::length_squared() const { return dot((*this), (*this)); }
+double Position::length_squared() const { return dot(*this, *this); }
 double Direction::length() const { return sqrt(length_squared()); }
 double Direction::length_squared() const { return dot(*this, *this); }
 

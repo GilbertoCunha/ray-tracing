@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <optional>
+#include "../rendering/global.h"
+#include "../physics/transformation.h"
 #include "../physics/ray.h"
 #include "hittable.h"
 
@@ -17,7 +19,28 @@ class Sphere : public Hittable {
 
         // Hittable methods
         Ray scatter_ray_on_hit(const Ray& ray) const override {
-            return Ray(ray.origin, ray.direction, ray.color*color);
+            
+            // Perfect reflection
+            // calculate normal
+            Direction normal = (ray.origin - center);
+            normal = normal / normal.length();
+            int is_inside = dot(normal, ray.direction) < 0 ? 1 : -1;
+            normal = normal * is_inside;
+
+            // calculate outgoing direction
+            Rotation rot = Rotation(
+                cross(normal, -ray.direction),
+                2*angle(normal, ray.direction)
+            );
+            Direction new_direction = dot(rot, -ray.direction);
+            double f = 0.3;
+            Color new_color = Color(
+                ray.color.red()*(1-f)+color.red()*f,
+                ray.color.green()*(1-f)+color.green()*f,
+                ray.color.blue()*(1-f)+color.blue()*f
+            );
+
+            return Ray(ray.origin, new_direction, new_color);
         }
 
         /**
@@ -82,7 +105,7 @@ class Sphere : public Hittable {
             }
 
             // Calculate intersection position
-            optional<double> intersection = root.has_value() ? root.value() : optional<double>{};
+            optional<double> intersection = root.has_value() ? root.value() - EPS : optional<double>{};
 
             return intersection;
         }
