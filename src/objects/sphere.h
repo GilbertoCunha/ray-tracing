@@ -13,34 +13,39 @@ class Sphere : public Hittable {
         Position center;
         Color color;
         double radius;
-        Sphere(const Position& center, double radius, const Color& c) : center{center}, radius{radius}, color{c} {};
+        Sphere(
+            const Position& position,
+            double radius,
+            const Color& color,
+            double albedo,
+            Material& material
+        ) :
+            center{position},
+            radius{radius},
+            color{color}
+        {
+            this->albedo = albedo;
+            this->material = &material;
+        }
         Sphere() = default;
         ~Sphere() = default;
 
-        // Hittable methods
-        Ray scatter_ray_on_hit(const Ray& ray) const override {
-            
-            // Perfect reflection
-            // calculate normal
-            Direction normal = (ray.origin - center);
+        /**
+         * @brief Calculates normal between sphere and ray that HAS HIT sphere
+         * 
+         * @param r Incoming ray that HAS HIT the sphere
+         * @return Direction Sphere normal at intersection
+         */
+        Direction calculate_normal(const Ray& r) const override {
+            // Calculate outwards normal
+            Direction normal = (r.origin - center);
             normal = normal / normal.length();
-            int is_inside = dot(normal, ray.direction) < 0 ? 1 : -1;
+
+            // If ray is inside sphere, invert normal (point it inward)
+            int is_inside = dot(normal, r.direction) < 0 ? 1 : -1;
             normal = normal * is_inside;
 
-            // calculate outgoing direction
-            Rotation rot = Rotation(
-                cross(normal, -ray.direction),
-                2*angle(normal, ray.direction)
-            );
-            Direction new_direction = dot(rot, -ray.direction);
-            double f = 0.3;
-            Color new_color = Color(
-                ray.color.red()*(1-f)+color.red()*f,
-                ray.color.green()*(1-f)+color.green()*f,
-                ray.color.blue()*(1-f)+color.blue()*f
-            );
-
-            return Ray(ray.origin, new_direction, new_color);
+            return normal;
         }
 
         /**

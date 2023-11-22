@@ -7,6 +7,7 @@ using namespace std;
 #include "rendering/scene.h"
 #include "objects/background.h"
 #include "objects/sphere.h"
+#include "materials/metal.h"
 #include <optional>
 
 /**
@@ -38,16 +39,23 @@ int main () {
     Background background = Background(camera);
     Scene scene = Scene(background);
 
+    // Create materials for objects
+    Metal metal = Metal();
+
     // Add sphere to the scene
     Sphere sphere1 = Sphere(
         Position(1.0, 1.0, 5.0),
         1.5,
-        Color(0.0, 1.0, 0.0)
+        Color(0.0, 1.0, 0.0),
+        0.3,
+        metal
     );
     Sphere sphere2 = Sphere(
         Position(1.0, -4.0, 8.0),
         1.5,
-        Color(1.0, 0.0, 0.0)
+        Color(1.0, 0.0, 0.0),
+        0.6,
+        metal
     );
     scene.add_object(&sphere1);
     scene.add_object(&sphere2);

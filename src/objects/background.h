@@ -4,7 +4,7 @@
 #include "hittable.h"
 #include "../rendering/camera.h"
 
-class Background : Hittable {
+class Background {
     public:
         Position center;
         Background(const Camera& c) : center{c.position} {}
@@ -22,22 +22,13 @@ class Background : Hittable {
          * @param ray the ray that made contact with the background
          * @return Ray the ray after hitting the background (color shifted)
          */
-        Ray scatter_ray_on_hit(const Ray& ray) const override {
+        Ray scatter_ray_on_hit(const Ray& ray) const {
             Color color;
             double x = ray.direction[0] / ray.direction.length();
             double blue = 1 - min(max(0.5 * (x + 1), 0.0), 1.0);
             color = Color(blue, blue, 1.0);
             return Ray(ray.origin, ray.direction, ray.color*color);
         }
-
-        /**
-         * @brief Ray never directly hits background, this function returns null
-         * 
-         * @param ray Incoming ray
-         * @return optional<double> null
-         */
-        optional<double> intersection_distance(const Ray& ray) const override { return nullopt; }
-
 };
 
 #endif
