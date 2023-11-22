@@ -4,6 +4,7 @@
 #include <optional>
 #include "../materials/material.h"
 #include "../physics/ray.h"
+#include "../math/random.h"
 
 class Hittable {
     public:
@@ -38,11 +39,10 @@ class Hittable {
          * @return Ray the scattered ray: direction and color have been changed.
          */
         Ray scatter_ray_on_hit(const Ray& r) const {
-            Direction normal = calculate_normal(r);
             return Ray(
                 r.origin,
                 material->scatter_direction(r.direction, calculate_normal(r)),
-                sum_colors(r.color, color, 1-albedo, albedo)
+                random_uniform(0.0, 1.0) > albedo ? color : r.color
             );
         };
 

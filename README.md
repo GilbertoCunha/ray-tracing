@@ -47,3 +47,11 @@ Hope you enjoy this almost as much as I do!
     - An `ScatterSampler` object should define how to choose an outgoing ray given an incoming ray and a `Material` (defined by a **BRDF**).
     - An `Object` should be instanciated with a `Material` and a `ScatterSampler`. The `Object`'s concern is now only **geometrical**: calculate ray intersections.
     - The `Color` of the outgoing ray is calculated using multiplication.
+
+
+## Speed improvements
+
+1. Rebuild `Transformation`, `Position`, `Direction` and `Color` to make use of fast `C++` libraries
+2. Split `.h` and `.cpp` files correctly
+3. Use `vectors` instead of `pointers` for `dynamic arrays` (try this for shooter)
+4. Use `smart pointers` instead of regular ones when otherwise

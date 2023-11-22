@@ -111,7 +111,7 @@ class AntiAliasingRayShooter : public RayShooter {
                     for (int k=0; k<rays_per_pixel; k++) {
 
                         // Calculate random rotations
-                        rot_vert = Rotation(
+                        /*rot_vert = Rotation(
                             Direction(0.0, 1.0, 0.0),
                             random_uniform(
                                 angle_vert_upper - angle_vert_delta, 
@@ -124,12 +124,12 @@ class AntiAliasingRayShooter : public RayShooter {
                                 angle_hor_upper - angle_hor_delta, 
                                 angle_hor_upper
                             )
-                        );
+                        );*/
 
                         // Create ray
                         rays[i][j][k] = Ray(
                             c.position,
-                            dot(rot_hor, dot(rot_vert, c.direction)),
+                            c.direction,// dot(rot_hor, dot(rot_vert, c.direction)),
                             Color(1.0, 1.0, 1.0) // Color of initial rays is the null element of multiplication
                         );
                     }

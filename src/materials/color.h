@@ -6,6 +6,10 @@
 #include "../math/interval.h"
 using namespace std;
 
+double clip(double channel) {
+    return min(max(channel, 0.0), 1.0);
+}
+
 /**
  * @brief Defines a class for a color
  * 
@@ -41,16 +45,16 @@ class Color {
         // Multiply colors (for scattering equations)
         Color operator*(double x) const {
             return Color(
-                rgb[0] * x,
-                rgb[1] * x,
-                rgb[2] * x
+                clip(rgb[0] * x),
+                clip(rgb[1] * x),
+                clip(rgb[2] * x)
             );
         }
         Color operator*(const Color& c) const {
             return Color(
-                rgb[0] * c.rgb[0],
-                rgb[1] * c.rgb[1],
-                rgb[2] * c.rgb[2]
+                clip(rgb[0] * c.rgb[0]),
+                clip(rgb[1] * c.rgb[1]),
+                clip(rgb[2] * c.rgb[2])
             );
         }
 
@@ -63,9 +67,9 @@ Color sum_colors(const Color& c1, const Color& c2, double weight1=0.5, double we
         throw ValueError("Weights in color sum must add up to 1.");
     }
     return Color(
-        c1.red()*weight1 + c2.red()*weight2,
-        c1.green()*weight1 + c2.green()*weight2,
-        c1.blue()*weight1 + c2.blue()*weight2
+        clip(c1.red()*weight1 + c2.red()*weight2),
+        clip(c1.green()*weight1 + c2.green()*weight2),
+        clip(c1.blue()*weight1 + c2.blue()*weight2)
     );
 }
 
@@ -79,9 +83,9 @@ ostream& operator<<(ostream& cout, const Color& c) {
 
 Color gamma_correction(const Color& c) {
     return Color(
-        sqrt(c.red()),
-        sqrt(c.green()),
-        sqrt(c.blue())
+        clip(sqrt(c.red())),
+        clip(sqrt(c.green())),
+        clip(sqrt(c.blue()))
     );
 }
 

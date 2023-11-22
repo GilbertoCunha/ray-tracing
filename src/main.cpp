@@ -8,6 +8,7 @@ using namespace std;
 #include "objects/background.h"
 #include "objects/sphere.h"
 #include "materials/metal.h"
+#include "materials/lambertian.h"
 #include <optional>
 
 /**
@@ -26,7 +27,7 @@ int main () {
 
     // Create camera and ray shooter
     Camera camera = Camera(
-        Position(1.0, 0.0, 0.0),
+        Position(2.0, 0.0, 0.0),
         Direction(0.0, 0.0, 1.0),
         fov=fov,
         aspect_ratio=aspect_ratio,
@@ -41,24 +42,33 @@ int main () {
 
     // Create materials for objects
     Metal metal = Metal();
+    Lambertian lambertian = Lambertian();
 
     // Add sphere to the scene
     Sphere sphere1 = Sphere(
         Position(1.0, 1.0, 5.0),
-        1.5,
-        Color(0.0, 1.0, 0.0),
-        0.3,
-        metal
+        1.0,
+        Color(1.0, 1.0, 1.0),
+        0.999,
+        lambertian
     );
     Sphere sphere2 = Sphere(
         Position(1.0, -4.0, 8.0),
-        1.5,
-        Color(1.0, 0.0, 0.0),
+        1.0,
+        Color(1.0, 1.0, 1.0),
         0.6,
-        metal
+        lambertian
+    );
+    Sphere sphere3 = Sphere(
+        Position(-1000.0, 0.0, 0.0),
+        1000.0,
+        Color(1.0, 1.0, 1.0),
+        0.6,
+        lambertian
     );
     scene.add_object(&sphere1);
     scene.add_object(&sphere2);
+    scene.add_object(&sphere3);
 
     // Render image
     cout << "\nStarting render\n";
