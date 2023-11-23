@@ -30,7 +30,7 @@ class Sphere : public Hittable {
             if (diff > 2*EPS) {
                 cout << "RAY IS TOO FAR AWAY! Difference: " << diff << '\n';
             }
-            return dot(normal, r.direction) < 0 ? normal : -normal;
+            return normal.dot(r.direction) < 0 ? normal : -normal;
         }
 
         /**
@@ -66,9 +66,9 @@ class Sphere : public Hittable {
 
             // Calculate quadratic formula a, b and c coefficients
             Direction pos_diff = ray.origin - center;
-            double a = dot(ray.direction, ray.direction);
-            double b = 2 * dot(ray.direction, pos_diff);
-            double c = dot(pos_diff, pos_diff) - radius*radius;
+            double a = ray.direction.length_squared();
+            double b = 2 * ray.direction.dot(pos_diff);
+            double c = pos_diff.length_squared() - radius*radius;
 
             // Calculate the root
             // The correct root to calculate must

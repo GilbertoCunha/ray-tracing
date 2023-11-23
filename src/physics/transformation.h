@@ -1,41 +1,29 @@
 #ifndef TRANSFORMATION_H
 #define TRANSFORMATION_H
 
+#include <Eigen/Dense>
 #include "vector.h"
 
 using Row = Direction;
 
 class Transformation {
     private:
-        Row row[3];
+        Eigen::Matrix3d m;
     public:
-        Transformation(Row r1, Row r2, Row r3) {
-            row[0] = r1;
-            row[1] = r2;
-            row[2] = r3;
+        Transformation(const Row& r1, const Row& r2, const Row& r3) {
+            m << r1.get_vector(), r2.get_vector(), r3.get_vector();
         }
+        Transformation(const Eigen::Matrix3d matrix) : m{matrix} {}
         Transformation() = default;
 
-        // Indexing operators
-        Row operator[](int i) const { return row[i]; }
-        Row& operator[](int i) { return row[i]; }
-};
+        // Get matrix
+        Eigen::Matrix3d get_matrix() const { return m; }
 
-// Apply transformations to vectors and positions
-Direction dot(const Transformation& t, const Direction& u) {
-    return Direction(
-        dot(t[0], u),
-        dot(t[1], u),
-        dot(t[2], u)
-    );
-}
-Position dot(const Transformation& t, const Position& u) {
-    return Position(
-        dot(t[0], u),
-        dot(t[1], u),
-        dot(t[2], u)
-    );
-}
+        // Dot product with directions
+        Direction operator*(const Direction& d) const { return Direction(m * d.get_vector()); }
+        Position operator*(const Position& d) const { return Position(m * d.get_vector()); }
+        Transformation operator*(const Transformation& t) const { return Transformation(m * t.get_matrix()); }
+};
 
 /**
  * @brief A rotation matrix given the axis of rotation and the angle.
@@ -45,7 +33,7 @@ Position dot(const Transformation& t, const Position& u) {
  */
 class Rotation : public Transformation {
     public:
-        Rotation(Direction axis, double angle) : Transformation{
+        Rotation(const Direction& axis, double angle) : Transformation{
             Row(
                 cos(angle) + axis[0]*axis[0]*(1-cos(angle)),
                 axis[0]*axis[1]*(1-cos(angle)) - axis[2]*sin(angle),

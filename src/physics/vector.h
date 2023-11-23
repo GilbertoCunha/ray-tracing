@@ -1,6 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <Eigen/Dense>
 #include <iostream>
 #include <math.h>
 using namespace std;
@@ -11,80 +12,69 @@ using namespace std;
  */
 class Direction {
     private:
-        double e[3];
+        Eigen::Vector3d e;
     public:
-        Direction(double x, double y, double z) : e{x,y,z} {}
+        Direction(double x, double y, double z) : e{Eigen::Vector3d(x,y,z)} {}
+        Direction(const Eigen::Vector3d& v) : e{v} {}
         Direction() = default;
 
-        // Indexing operations
+        // Get vector
+        Eigen::Vector3d get_vector() const { return e; }
+
+        // Indexing
         double operator[](int i) const { return e[i]; }
         double& operator[](int i) { return e[i]; }
 
-        // Translation operations
-        Direction operator+(const Direction& u) const {
-            return Direction(
-                e[0] + u[0],
-                e[1] + u[1],
-                e[2] + u[2]
-            );
-        }
-        Direction& operator+=(const Direction& u) {
-            e[0] += u[0];
-            e[1] += u[1];
-            e[2] += u[2];
+        // Addition
+        Direction operator+(const Direction& d) const { return Direction(e + d.get_vector()); }
+        Direction& operator+=(const Direction& d) {
+            this->e += d.get_vector();
             return (*this);
         }
-        Direction operator-() const {
-            return Direction(-e[0], -e[1], -e[2]);
-        }
-        Direction operator-(const Direction& u) const {
-            return Direction(
-                e[0] - u[0],
-                e[1] - u[1],
-                e[2] - u[2]
-            );
-        }
-        Direction& operator-=(const Direction& u) {
-            e[0] -= u[0];
-            e[1] -= u[1];
-            e[2] -= u[2];
-            return (*this);
-        }
+        Position operator+(const Position& d) const { return Position(e + d.get_vector()); }
 
-        // Scaling operations
-        Direction operator*(double x) const {
-            return Direction(
-                e[0] * x,
-                e[1] * x,
-                e[2] * x
-            );
+        // Subtraction
+        Direction operator-() const {
+            return Direction(-e);
         }
+        Direction operator-(const Direction& d) const { return Direction(e - d.get_vector()); }
+        Direction& operator-=(const Direction& d) {
+            this->e -= d.get_vector();
+            return *this;
+        }
+        Position operator-(const Position& d) const { return Position(e - d.get_vector()); }
+
+        // Multiplication and division
+        Direction operator*(double x) const { return Direction(e * x); }
         Direction& operator*=(double x) {
-            e[0] *= x;
-            e[1] *= x;
-            e[2] *= x;
-            return (*this);
+            this->e *= x; 
+            return *this;
         }
-        Direction operator/(double x) const {
-            return Direction(
-                e[0] / x,
-                e[1] / x,
-                e[2] / x
-            );
-        }
+        Direction operator/(double x) const { return Direction(e / x); }
         Direction& operator/=(double x) {
-            e[0] /= x;
-            e[1] /= x;
-            e[2] /= x;
-            return (*this);
+            this->e /= x;
+            return *this;
         }
 
         // Length operations
-        double length() const;
-        double length_squared() const;
+        double length() const { return e.norm(); }
+        double length_squared() const { return e.dot(e); };
+        Direction normalize() const { return (*this) / length(); }
 
-        // Normalization
-        Direction normalize() const { return (*this) / (*this).length(); }
+        // Dot product with positions
+        double dot(const Direction& d) const { return e.dot(d.get_vector()); }
+        double dot(const Position& p) const { return e.dot(p.get_vector()); }
+
+        // Cross product with directions
+        Direction cross(const Direction& d) const { return Direction(e.cross(d.get_vector())); }
+
+        // Angle between
+        double angle(const Direction& d) const {
+            return e.dot(d.get_vector()) / (length() * d.length());
+        }
+        double angle(const Position& d) const {
+            return e.dot(d.get_vector()) / (length() * d.length());
+        }
 };
 
 /**
@@ -93,126 +83,69 @@ class Direction {
  */
 class Position {
     private:
-        double e[3];
+        Eigen::Vector3d e;
     public:
-        Position(double x, double y, double z) : e{x,y,z} {}
+        Position(double x, double y, double z) : e{Eigen::Vector3d(x,y,z)} {}
+        Position(const Eigen::Vector3d& v) : e{v} {}
         Position() = default;
 
-        // Indexing operations
+        // Get vector
+        Eigen::Vector3d get_vector() const { return e; }
+
+        // Indexing
         double operator[](int i) const { return e[i]; }
         double& operator[](int i) { return e[i]; }
 
+        // Addition
+        Position operator+(const Direction& d) const { return Position(e + d.get_vector()); }
+        Position& operator+=(const Direction& d) {
+            this->e += d.get_vector();
+            return (*this);
+        }
+
         // Subtraction
-        // Position - Position = Direction
         Position operator-() const {
-            return Position(-e[0], -e[1], -e[2]);
+            return Position(-e);
         }
-        Direction operator-(const Position& p) const {
-            return Direction(
-                e[0]-p[0],
-                e[1]-p[1],
-                e[2]-p[2]
-            );
+        Position operator-(const Direction& d) const { return Position(e - d.get_vector()); }
+        Position& operator-=(const Direction& d) {
+            this->e -= d.get_vector();
+            return *this;
         }
+        Direction operator-(const Position& d) const { return Direction(e - d.get_vector()); }
 
-        // Translation operations
-        Position operator+(const Direction& u) const {
-            return Position(
-                e[0]+u[0],
-                e[1]+u[1],
-                e[2]+u[2]
-            );
-        }
-        Position operator-(const Direction& u) const {
-            return Position(
-                e[0]-u[0],
-                e[1]-u[1],
-                e[2]-u[2]
-            );
-        }
-
-        // Scaling operations
-        Position operator*(double x) const {
-            return Position(
-                e[0]*x,
-                e[1]*x,
-                e[2]*x
-            );
-        }
+        // Multiplication and division
+        Position operator*(double x) const { return Position(e * x); }
         Position& operator*=(double x) {
-            e[0] *= x;
-            e[1] *= x;
-            e[2] *= x;
-            return (*this);
+            this->e *= x; 
+            return *this;
         }
-        Position operator/(double x) const {
-            return Position(
-                e[0]/x,
-                e[1]/x,
-                e[2]/x
-            );
-        }
+        Position operator/(double x) const { return Position(e / x); }
         Position& operator/=(double x) {
-            e[0] /= x;
-            e[1] /= x;
-            e[2] /= x;
-            return (*this);
+            this->e /= x;
+            return *this;
         }
 
-        double length() const;
-        double length_squared() const;
+        // Length operations
+        double length() const { return e.norm(); }
+        double length_squared() const { return e.dot(e); };
+        Position normalize() const { return (*this) / length(); }
+
+        // Dot products
+        double dot(const Direction& d) const { return e.dot(d.get_vector()); }
+        double dot(const Position& p) const { return e.dot(p.get_vector()); }
+
+        // Cross product with directions
+        Position cross(const Position& d) const { return Position(e.cross(d.get_vector())); }
+
+        // Angle between
+        double angle(const Direction& d) const {
+            return e.dot(d.get_vector()) / (length() * d.length());
+        }
+        double angle(const Position& d) const {
+            return e.dot(d.get_vector()) / (length() * d.length());
+        }
 };
-
-
-// Dot products
-double dot(const Position& p, const Position& q) {
-    return p[0]*q[0] + p[1]*q[1] * p[2]*q[2];
-}
-double dot(const Direction& u, const Direction& v) {
-    return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
-}
-double dot(const Position& p, const Direction& u) {
-    return p[0]*u[0] + p[1]*u[1] * p[2]*u[2];
-}
-double dot(const Direction& u, const Position& p) {
-    return p[0]*u[0] + p[1]*u[1] * p[2]*u[2];
-}
-
-// Length operations
-double Position::length() const { return sqrt(length_squared()); }
-double Position::length_squared() const { return dot(*this, *this); }
-double Direction::length() const { return sqrt(length_squared()); }
-double Direction::length_squared() const { return dot(*this, *this); }
-
-// Angle between two vectors
-double angle(const Direction& u, const Direction& v) {
-    return acos( dot(u, v) / (u.length() * v.length()) );
-}
-double angle(const Direction& u, const Position& p) {
-    return acos( dot(u, p) / (u.length() * p.length()) );
-}
-double angle(const Position& p, const Direction& u) {
-    return acos( dot(u, p) / (u.length() * p.length()) );
-}
-double angle(const Position& p, const Position& q) {
-    return acos( dot(q, p) / (q.length() * p.length()) );
-}
-
-// Cross products
-Position cross(const Position& p, const Position& q) {
-    return Position(
-        p[1]*q[2] - p[2]*q[1],
-        p[2]*q[0] - p[0]*q[2],
-        p[0]*q[1] - p[1]*q[0]
-    );
-}
-Direction cross(const Direction& u, const Direction& v) {
-    return Direction(
-        u[1]*v[2]-u[2]*v[1],
-        u[2]*v[0]-u[0]*v[2],
-        u[0]*v[1]-u[1]*v[0]
-    );
-}
 
 // Printing
 ostream& operator<<(ostream& cout, const Position& p) {

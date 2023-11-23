@@ -11,6 +11,11 @@ I am also thoroughly documenting everything thoroughly, so that both you and I c
 Hope you enjoy this almost as much as I do!
 
 
+## Dependencies
+
+This project uses `eigen`. To install everything, run `sudo make install`.
+
+
 # TODO
 
 ## Functionality roadmap:

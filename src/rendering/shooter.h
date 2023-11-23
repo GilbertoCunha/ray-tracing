@@ -61,7 +61,7 @@ class GridRayShooter : public RayShooter {
                     rays[i][j] = new Ray[1];
                     rays[i][j][0] = Ray(
                         c.position,
-                        dot(rot_hor, dot(rot_vert, c.direction)),
+                        rot_hor * rot_vert * c.direction,
                         Color(1.0, 1.0, 1.0) // Color of initial rays is the null element of multiplication
                     );
 
@@ -129,7 +129,7 @@ class AntiAliasingRayShooter : public RayShooter {
                         // Create ray
                         rays[i][j][k] = Ray(
                             c.position,
-                            dot(rot_hor, dot(rot_vert, c.direction)),
+                            rot_hor * rot_vert * c.direction,
                             Color(1.0, 1.0, 1.0) // Color of initial rays is the null element of multiplication
                         );
                     }

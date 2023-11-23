@@ -1,6 +1,7 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include <Eigen/Dense>
 #include <iostream>
 #include "../exceptions/value_error.h"
 #include "../math/interval.h"
@@ -16,11 +17,14 @@ double clip(double channel) {
  */
 class Color {
     protected:
-        double rgb[3];
+        Eigen::Vector3d rgb;
         Interval color_range = Interval(0.0, 1.0);
-    
+        Color(const Eigen::Vector3d& v) : rgb{v} {
+            if (!(color_range.contains(v[0]) && color_range.contains(v[1]) && color_range.contains(v[2]))) {
+                throw ValueError("Color channel values must lie between 0 and 1.");
+            }
+        }
     public:
-
         /**
          * @brief Construct a new Color object.
          * Throws a ValueError exception whenever the channel value are
@@ -30,7 +34,7 @@ class Color {
          * @param g 
          * @param b 
          */
-        Color(double r, double g, double b) : rgb{r,g,b} {
+        Color(double r, double g, double b) : rgb{Eigen::Vector3d(r,g,b)} {
             if (!(color_range.contains(r) && color_range.contains(g) && color_range.contains(b))) {
                 throw ValueError("Color channel values must lie between 0 and 1.");
             }
@@ -43,59 +47,31 @@ class Color {
         double blue() const { return rgb[2]; };
 
         // Multiply colors (for scattering equations)
-        Color operator*(double x) const {
-            return Color(
-                rgb[0] * x,
-                rgb[1] * x,
-                rgb[2] * x
-            );
+        Color operator*(double x) const { return Color(rgb * x); }
+        Color operator*(const Color& c) const { return Color(rgb * c.rgb); }
+        Color mix(const Color& c2, double w1=0.5, double w2=0.5) {
+            if (w1 + w2 != 1.0) throw ValueError("Weights in color sum must add up to 1.");
+            return Color(rgb * w1 + c2.rgb * w2);
         }
-        Color operator*(const Color& c) const {
-            return Color(
-                rgb[0] * c.rgb[0],
-                rgb[1] * c.rgb[1],
-                rgb[2] * c.rgb[2]
-            );
-        }
+
+        Color gamma_correction() const { return Color(sqrt(rgb[0]), sqrt(rgb[1]), sqrt(rgb[2])); }
 
         // Convert image to different file formats
-        string to_ppm() const;
+        string to_ppm() const {
+            Color corrected = gamma_correction();
+            int red_int = corrected.red() * 255.999;
+            int green_int = corrected.green() * 255.999;
+            int blue_int = corrected.blue() * 255.999;
+            return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
+        };
+
+        ostream& operator<<(ostream& cout) const {
+            cout << "Color(";
+            cout << rgb[0] << ", ";
+            cout << rgb[1] << ", ";
+            cout << rgb[2] << ')';
+            return cout;
+        }
 };
-
-Color sum_colors(const Color& c1, const Color& c2, double weight1=0.5, double weight2=0.5) {
-    if (weight1 + weight2 != 1.0) {
-        throw ValueError("Weights in color sum must add up to 1.");
-    }
-    return Color(
-        c1.red()*weight1 + c2.red()*weight2,
-        c1.green()*weight1 + c2.green()*weight2,
-        c1.blue()*weight1 + c2.blue()*weight2
-    );
-}
-
-ostream& operator<<(ostream& cout, const Color& c) {
-    cout << "Color(";
-    cout << c.red() << ", ";
-    cout << c.green() << ", ";
-    cout << c.blue() << ')';
-    return cout;
-}
-
-Color gamma_correction(const Color& c) {
-    return Color(
-        sqrt(c.red()),
-        sqrt(c.green()),
-        sqrt(c.blue())
-    );
-}
-
-// Convert to string for ppm images
-string Color::to_ppm() const {
-    Color corrected = gamma_correction(*this);
-    int red_int = corrected.red() * 255.999;
-    int green_int = corrected.green() * 255.999;
-    int blue_int = corrected.blue() * 255.999;
-    return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
-}
 
 #endif
