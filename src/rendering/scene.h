@@ -86,7 +86,7 @@ class Scene {
          * @return optional<tuple<int,double>> index and distance of closest object hit (if any)
          */
         optional<tuple<int,double>> closest_object(const Ray& r) const {
-            optional<tuple<double, int>> closest = nullopt;
+            optional<tuple<int, double>> closest = nullopt;
             optional<double> distance = nullopt;
 
             for (int i=0; i<objects.size(); i++) {

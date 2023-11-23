@@ -26,6 +26,10 @@ class Sphere : public Hittable {
         Direction calculate_normal(const Ray& r) const override {
             // If ray is inside sphere, invert normal (point it inward)
             Direction normal = (r.origin - center).normalize();
+            double diff = (r.origin - center).length() - radius;
+            if (diff > 2*EPS) {
+                cout << "RAY IS TOO FAR AWAY! Difference: " << diff << '\n';
+            }
             return dot(normal, r.direction) < 0 ? normal : -normal;
         }
 
@@ -91,7 +95,7 @@ class Sphere : public Hittable {
             }
 
             // Calculate intersection position
-            optional<double> intersection = root.has_value() ? root.value() - EPS : optional<double>{};
+            optional<double> intersection = root.has_value() ? root.value() : optional<double>{};
 
             return intersection;
         }

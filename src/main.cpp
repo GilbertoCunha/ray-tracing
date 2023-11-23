@@ -19,10 +19,10 @@ using namespace std;
 int main () {
 
     // Global variables
-    int rays_per_pixel = 50;
+    int rays_per_pixel = 5;
     int multi_scattering = 8;
-    int image_height = 720;
-    double fov = 0.33*M_PI;
+    int image_height = 480;
+    double fov = 0.25*M_PI;
     double aspect_ratio = 16.0 / 9.0;
 
     // Create camera and ray shooter
