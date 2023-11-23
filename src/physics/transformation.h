@@ -4,13 +4,30 @@
 #include <Eigen/Dense>
 #include "direction.h"
 
-using Row = Direction;
+class Row : public Eigen::Vector3d {
+    public:
+        Row(double x, double y, double z) : Eigen::Vector3d(x, y, z) {}
+        Row(const Eigen::Vector3d& v) : Eigen::Vector3d(v) {}
+        Row() = default;
+};
+
+class Column : public Eigen::Vector3d {
+    public:
+        Column(double x, double y, double z) : Eigen::Vector3d(x, y, z) {}
+        Column(const Eigen::Vector3d& v) : Eigen::Vector3d(v) {}
+        Column() = default;
+};
 
 class Transformation {
     private:
         Eigen::Matrix3d m;
     public:
-        Transformation(const Row& r1, const Row& r2, const Row& r3) { m << r1.e, r2.e, r3.e; }
+        Transformation(const Row& r1, const Row& r2, const Row& r3) { 
+            m.row(0) = r1;
+            m.row(1) = r2;
+            m.row(2) = r3;
+        }
+        Transformation(const Column& r1, const Column& r2, const Column& r3) { m << r1, r2, r3; }
         Transformation(const Eigen::Matrix3d matrix) : m{matrix} {}
         Transformation() = default;
 
