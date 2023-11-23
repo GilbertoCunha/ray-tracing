@@ -8,5 +8,5 @@ install:
 	@rm -r eigen-3.4.0
 
 run:
-	@g++ src/main.cpp -o main
+	@g++ -O3 src/main.cpp -o main
 	@./main

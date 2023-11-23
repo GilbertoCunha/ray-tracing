@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "direction_def.h"
-#include "position_def.h"
+#include "position.h"
 using namespace std;
 
 // Constructors

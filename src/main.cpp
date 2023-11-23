@@ -19,7 +19,7 @@ using namespace std;
 int main () {
 
     // Global variables
-    int rays_per_pixel = 5;
+    int rays_per_pixel = 50;
     int multi_scattering = 8;
     int image_height = 480;
     double fov = 0.25*M_PI;
