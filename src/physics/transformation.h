@@ -2,7 +2,7 @@
 #define TRANSFORMATION_H
 
 #include <Eigen/Dense>
-#include "vector.h"
+#include "direction.h"
 
 using Row = Direction;
 
@@ -10,9 +10,7 @@ class Transformation {
     private:
         Eigen::Matrix3d m;
     public:
-        Transformation(const Row& r1, const Row& r2, const Row& r3) {
-            m << r1.get_vector(), r2.get_vector(), r3.get_vector();
-        }
+        Transformation(const Row& r1, const Row& r2, const Row& r3) { m << r1.e, r2.e, r3.e; }
         Transformation(const Eigen::Matrix3d matrix) : m{matrix} {}
         Transformation() = default;
 
@@ -20,8 +18,8 @@ class Transformation {
         Eigen::Matrix3d get_matrix() const { return m; }
 
         // Dot product with directions
-        Direction operator*(const Direction& d) const { return Direction(m * d.get_vector()); }
-        Position operator*(const Position& d) const { return Position(m * d.get_vector()); }
+        Direction operator*(const Direction& d) const { return Direction(m * d.e); }
+        Position operator*(const Position& d) const { return Position(m * d.e); }
         Transformation operator*(const Transformation& t) const { return Transformation(m * t.get_matrix()); }
 };
 

@@ -2,7 +2,7 @@
 #define RANDOM_H
 
 #include <cstdlib>
-#include "../physics/vector.h"
+#include "../physics/direction.h"
 using namespace std;
 
 double random_uniform(double lower, double upper) {

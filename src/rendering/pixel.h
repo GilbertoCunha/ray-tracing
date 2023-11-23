@@ -2,7 +2,7 @@
 #define PIXEL_H
 
 #include "../materials/color.h"
-#include "../physics/vector.h"
+#include "../physics/direction.h"
 using namespace std;
 
 class Pixel {

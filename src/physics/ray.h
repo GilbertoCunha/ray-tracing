@@ -2,7 +2,7 @@
 #define RAY_H
 
 #include <iostream>
-#include "vector.h"
+#include "direction.h"
 #include "../materials/color.h"
 
 /**

@@ -48,7 +48,7 @@ class Color {
 
         // Multiply colors (for scattering equations)
         Color operator*(double x) const { return Color(rgb * x); }
-        Color operator*(const Color& c) const { return Color(rgb * c.rgb); }
+        Color operator*(const Color& c) const { return Color(rgb[0]*c.rgb[0], rgb[1]*c.rgb[1], rgb[2]*c.rgb[2]); }
         Color mix(const Color& c2, double w1=0.5, double w2=0.5) {
             if (w1 + w2 != 1.0) throw ValueError("Weights in color sum must add up to 1.");
             return Color(rgb * w1 + c2.rgb * w2);
@@ -64,14 +64,14 @@ class Color {
             int blue_int = corrected.blue() * 255.999;
             return to_string(red_int) + " " + to_string(green_int) + " " + to_string(blue_int);
         };
-
-        ostream& operator<<(ostream& cout) const {
-            cout << "Color(";
-            cout << rgb[0] << ", ";
-            cout << rgb[1] << ", ";
-            cout << rgb[2] << ')';
-            return cout;
-        }
 };
+
+ostream& operator<<(ostream& cout, const Color& c) {
+        cout << "Color(";
+        cout << c.red() << ", ";
+        cout << c.green() << ", ";
+        cout << c.blue() << ')';
+        return cout;
+    }
 
 #endif

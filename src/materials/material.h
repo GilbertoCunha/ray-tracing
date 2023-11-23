@@ -2,7 +2,7 @@
 #define MATERIAL_H
 
 #include "color.h"
-#include "../physics/vector.h"
+#include "../physics/direction.h"
 
 class Material {
     public:
