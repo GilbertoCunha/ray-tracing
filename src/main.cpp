@@ -8,6 +8,7 @@ using namespace std;
 #include "objects/background.h"
 #include "objects/sphere.h"
 #include "materials/metal.h"
+#include "materials/fuzzy_metal.h"
 #include "materials/lambertian.h"
 #include <optional>
 
@@ -42,12 +43,12 @@ int main () {
 
     // Add sphere to the scene
     Lambertian material_big    = Lambertian(Color(0.8, 0.8, 0.0));
-    Metal material_left             = Metal(Color(0.8, 0.8, 0.8));
+    FuzzyMetal material_left   = FuzzyMetal(Color(0.8, 0.8, 0.8), 0.1);
     Lambertian material_center = Lambertian(Color(0.7, 0.3, 0.3));
-    Metal material_right            = Metal(Color(0.8, 0.6, 0.2));
+    FuzzyMetal material_right  = FuzzyMetal(Color(0.8, 0.6, 0.2), 0.2);
     Sphere sphere_big    = Sphere(Position(-100.5,  0.0,  2.0), 100.0, material_big);
     Sphere sphere_left   = Sphere(Position(   0.0, -1.0,  2.0),   0.5, material_left);
-    Sphere sphere_center = Sphere(Position(   0.0,  0.0,  2.0),   0.5, material_center);
+    Sphere sphere_center = Sphere(Position(   0.0,  0.0,  2.2),   0.5, material_center);
     Sphere sphere_right  = Sphere(Position(   0.0,  1.0,  2.0),   0.5, material_right);
     scene.add_object(sphere_big);
     scene.add_object(sphere_center);
